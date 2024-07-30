@@ -273,7 +273,9 @@ class InferenceModel:
                 self.ml_logger.mlflow.log_metric('loss', val_loss)
 
             return val_loss, val_prec1, val_prec5
-
+        quantized_model_path = 'quantized_model.pth'
+        torch.save(self.model.state_dict(), quantized_model_path)
+        print(f"Quantized model saved to {quantized_model_path}")
 
 def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
