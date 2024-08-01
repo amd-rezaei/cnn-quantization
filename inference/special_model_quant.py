@@ -16,7 +16,6 @@ import torch
 import argparse
 
 
-
 # Argument parser setup
 parser = argparse.ArgumentParser(description='PyTorch MNIST Quantization')
 parser.add_argument('--data', metavar='DIR', default='./data',
