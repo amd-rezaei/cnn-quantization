@@ -314,6 +314,29 @@ class InferenceModel:
         torch.save(state_dict, 'quantized_model_neuton.pth')
         print("Quantized model saved to 'quantized_model_neuton.pth'")
 
+        # Save the model in ONNX format
+        # Adjust the input size as per your model requirements
+        dummy_input = torch.randn(1, 3, 224, 224).to(args.device)
+        onnx_path = 'quantized_model.onnx'
+
+        # Ensure the model is in evaluation mode
+        self.model.eval()
+
+        # Export the model to ONNX format
+        torch.onnx.export(
+            self.model,
+            dummy_input,
+            onnx_path,
+            export_params=True,  # Store the trained parameter weights inside the model file
+            opset_version=11,  # The ONNX version to export the model to
+            do_constant_folding=True,  # Simplify the model by folding constants
+            input_names=['input'],  # Name of the model's input
+            output_names=['output'],  # Name of the model's output
+            dynamic_axes={'input': {0: 'batch_size'}, 'output': {
+                0: 'batch_size'}}  # Variable length axes
+        )
+        print(f"Quantized model saved to '{onnx_path}'")
+
 
 
 def validate(val_loader, model, criterion):
